@@ -20,6 +20,8 @@ public:
     void CreateSensor(float* data, int x, int y);
     void CreateActuator(float* data, int x, int y);
 
+    dojoNode* GetNodePtr(QString node);
+
 signals:
     void dojoEvent(QString event);
 public slots:

@@ -23,7 +23,7 @@ public :
 
 public slots:
     void ClientProcess();
-    void ClientUpdate(QString text);
+    void ClientUpdate(QString event);
 
 
 protected:
@@ -45,6 +45,8 @@ private:
 
     float Sensor1, Sensor2, Sensor3,Sensor4,Sensor5,Sensor6;
     float Actuator1;
+
+    QMultiHash<int, QString> Nodes;
 
 };
 
