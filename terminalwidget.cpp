@@ -24,20 +24,21 @@ void TerminalWidget::AddText(QString text){
 }
 void TerminalWidget::ParseEvent(QString event){
     QStringList list = event.split(",");
-    case list[0] :
-        "1" ->
-            AddText("create node "+list[1]+","+list[2]);
+    switch (list.at(0).toInt()){
+        case 1 :
+            AddText("create node "+list.at(1)+","+list.at(2));
             break;
-        "2" ->
-            AddText("create sensor "+list[1]+","+list[2]);
+        case 2 :
+            AddText("create sensor "+list.at(1)+","+list.at(2));
             break;
-        "3" ->
-            AddText("create act "+list[1]+","+list[2]);
+        case 3 :
+            AddText("create act "+list.at(1)+","+list.at(2));
             break;
-        "4" ->
-            AddText("bind nodes "+list[1]+","+list[2]+" and "+list[3]+","+list[4]);
+        case 4 :
+            AddText("bind nodes "+list.at(1)+","+list.at(2)+" and "+list.at(3)+","+list.at(4));
             break;
-    default :
-        AddText("unknown message");
-        break;
+        default :
+            AddText("unknown message");
+            break;
+    }
 }

@@ -74,7 +74,7 @@ void dojoNetwork::BindNodes(int source_x, int source_y, int target_x, int target
     target->AddSource(synapse);
 
     QString event;
-    event += "4," + QString::number(x)+','+QString::number(y);
+    event += "4," + QString::number(source_x)+','+QString::number(source_y)+','+ QString::number(target_x)+','+QString::number(target_y);
 
     emit dojoEvent(event);
 }

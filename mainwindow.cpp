@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ConsoleOutput("terminalWidget created...");    
 
     Dojo = new dojoNetwork();
-    connect(Dojo, SIGNAL(dojoEvent(QJsonObject)), terminalWidget, SLOT(ParseEvent(QString)));
+    connect(Dojo, SIGNAL(dojoEvent(QString)), terminalWidget, SLOT(ParseEvent(QString)));
     ConsoleOutput("dojoNetwork created...");
 
     clientArea = new ClientArea(this, Dojo);
