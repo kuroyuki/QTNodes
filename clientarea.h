@@ -23,7 +23,7 @@ public :
 
 public slots:
     void ClientProcess();
-    void ClientUpdate(QJsonObject text);
+    void ClientUpdate(QString text);
 
 
 protected:

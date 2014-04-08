@@ -14,7 +14,7 @@ signals:
 
 public slots:
     void AddText(QString text);
-    void ParseJson(QJsonObject text);
+    void ParseEvent(QString event);
 
 private:
     QTextEdit* TextOutput;

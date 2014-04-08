@@ -22,8 +22,22 @@ void TerminalWidget::AddText(QString text){
     TextOutput->insertPlainText(text+'\n');
     TextOutput->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
-void TerminalWidget::ParseJson(QJsonObject json){
-   QStringList list = json.keys();
-   for (int i =0; i<list.length(); i++)
-       AddText(list[i]);
+void TerminalWidget::ParseEvent(QString event){
+    QStringList list = event.split(",");
+    case list[0] :
+        "1" ->
+            AddText("create node "+list[1]+","+list[2]);
+            break;
+        "2" ->
+            AddText("create sensor "+list[1]+","+list[2]);
+            break;
+        "3" ->
+            AddText("create act "+list[1]+","+list[2]);
+            break;
+        "4" ->
+            AddText("bind nodes "+list[1]+","+list[2]+" and "+list[3]+","+list[4]);
+            break;
+    default :
+        AddText("unknown message");
+        break;
 }

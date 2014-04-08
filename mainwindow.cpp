@@ -11,13 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ConsoleOutput("terminalWidget created...");    
 
     Dojo = new dojoNetwork();
-    connect(Dojo, SIGNAL(dojoEvent(QJsonObject)), terminalWidget, SLOT(ParseJson(QJsonObject)));
+    connect(Dojo, SIGNAL(dojoEvent(QJsonObject)), terminalWidget, SLOT(ParseEvent(QString)));
     ConsoleOutput("dojoNetwork created...");
 
     clientArea = new ClientArea(this, Dojo);
     setCentralWidget(clientArea);
     ConsoleOutput("client area created...");
-    connect(Dojo, SIGNAL(dojoEvent(QString)), clientArea, SLOT(ClientUpdate(QJsonObject)));
+    connect(Dojo, SIGNAL(dojoEvent(QString)), clientArea, SLOT(ClientUpdate(QString)));
 
     clientArea->InitializeNetwork();
 

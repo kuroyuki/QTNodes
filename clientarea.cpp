@@ -100,7 +100,7 @@ void ClientArea::ClientProcess(){
 
     update(78,78,25,25);
 }
-void ClientArea::ClientUpdate(QJsonObject text){
+void ClientArea::ClientUpdate(QString text){
     //Parse event string
 
 }

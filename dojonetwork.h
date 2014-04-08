@@ -21,7 +21,7 @@ public:
     void CreateActuator(float* data, int x, int y);
 
 signals:
-    void dojoEvent(QJsonObject event);
+    void dojoEvent(QString event);
 public slots:
     void Process();
 
