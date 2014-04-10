@@ -19,13 +19,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ConsoleOutput("client area created...");
     connect(Dojo, SIGNAL(dojoEvent(QString)), clientArea, SLOT(ClientUpdate(QString)));
 
+    watchWidget = new WatchWidget(Dojo);
+    addDockWidget(Qt::BottomDockWidgetArea, watchWidget);
+    ConsoleOutput("watchWidget created...");
+    connect(clientArea, SIGNAL(AddToWatch(QString)), watchWidget, SLOT(AddPlot(QString)));
+
     clientArea->InitializeNetwork();
 
     createActions();
     createMenus();
 
     setWindowTitle(tr("dojoNodes"));
-    resize(700, 500);
+    resize(1200, 600);
 }
 
 MainWindow::~MainWindow()

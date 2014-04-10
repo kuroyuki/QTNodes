@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = QTNodes
 TEMPLATE = app
@@ -17,12 +17,16 @@ SOURCES += main.cpp\
     terminalwidget.cpp \
     dojonode.cpp \
     dojonetwork.cpp \
-    clientarea.cpp
+    clientarea.cpp \
+    watchwidget.cpp \
+    ../qcustomplot/qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     terminalwidget.h \
     dojonode.h \
     dojonetwork.h \
-    clientarea.h
+    clientarea.h \
+    watchwidget.h \
+    ../qcustomplot/qcustomplot.h
 
 FORMS    += mainwindow.ui

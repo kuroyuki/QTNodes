@@ -25,7 +25,7 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(ClientProcess()));
-    timer->start(50);
+    timer->start(20);
 
     grabKeyboard();
 }
@@ -37,32 +37,34 @@ void ClientArea::InitializeNetwork(){
     dojoPtr->CreateSensor(&Sensor4, 4,1);
     dojoPtr->CreateSensor(&Sensor5, 5,1);
     dojoPtr->CreateSensor(&Sensor6, 6,1);
+    dojoPtr->CreateSensor(&Sensor7, 7,1);
+    dojoPtr->CreateSensor(&Sensor8, 8,1);
+
 
     dojoPtr->CreateActuator(&Actuator1, 4,4);
 
-    dojoPtr->CreateNode(4,3);
-    dojoPtr->CreateNode(2,2);
-    dojoPtr->CreateNode(5,2);
+    dojoPtr->CreateNode(4,2);
+    dojoPtr->CreateNode(6,2);
+    dojoPtr->CreateNode(3,2);
 
-    dojoPtr->BindNodes(1,1,2,2);
-    dojoPtr->BindNodes(2,1,2,2);
-    dojoPtr->BindNodes(3,1,2,2);
+    dojoPtr->BindNodes(1,1,3,2);
+    dojoPtr->BindNodes(2,1,3,2);
+    dojoPtr->BindNodes(3,1,3,2);
+    dojoPtr->BindNodes(4,1,3,2);
 
-    dojoPtr->BindNodes(2,2,4,3);
-    dojoPtr->BindNodes(5,2,4,3);
-    dojoPtr->BindNodes(3,1,4,3);
-    dojoPtr->BindNodes(4,1,4,3);
+    dojoPtr->BindNodes(5,1,6,2);
+    dojoPtr->BindNodes(6,1,6,2);
+    dojoPtr->BindNodes(7,1,6,2);
+    dojoPtr->BindNodes(8,1,6,2);
 
-    dojoPtr->BindNodes(4,1,5,2);
-    dojoPtr->BindNodes(5,1,5,2);
-    dojoPtr->BindNodes(6,1,5,2);
+    dojoPtr->BindNodes(3,2,4,2);
+    dojoPtr->BindNodes(6,2,4,2);
+    dojoPtr->BindNodes(4,1,4,2);
+    dojoPtr->BindNodes(5,1,4,2);
 
-    dojoPtr->BindNodes(2,2,4,3);
-    dojoPtr->BindNodes(5,2,4,3);
+    dojoPtr->BindNodes(4,2,4,4);
 
-    dojoPtr->BindNodes(4,3,4,4);
-
-    UpdateNetwork();
+    UpdateNetwork(bitMask);
 }
 
 void ClientArea::keyPressEvent(QKeyEvent *event){
@@ -71,21 +73,40 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
     else if (event->key() == Qt::Key_Right)
         shift++;
 
+    if(event->key() == Qt::Key_1)
+         emit AddToWatch("1,1");
+    else if(event->key() == Qt::Key_2)
+        emit AddToWatch("2,1");
+    else if(event->key() == Qt::Key_3)
+        emit AddToWatch("3,1");
+    else if(event->key() == Qt::Key_4)
+        emit AddToWatch("4,1");
+    else if(event->key() == Qt::Key_5)
+        emit AddToWatch("3,2");
+    else if(event->key() == Qt::Key_6)
+        emit AddToWatch("6,2");
+    else if(event->key() == Qt::Key_7)
+        emit AddToWatch("4,2");
+    else if(event->key() == Qt::Key_8)
+        emit AddToWatch("4,4");
+
     if(shift>0)
         bitMask = originalMask>>shift;
     else
         bitMask = originalMask<<abs(shift);
 
-    UpdateNetwork();
+    UpdateNetwork(bitMask);
     update();
 }
-void ClientArea::UpdateNetwork(){
-    Sensor1 = 0;
-    Sensor2 = 0;
-    Sensor3 = 100;
-    Sensor4 = 100;
-    Sensor5 = 0;
-    Sensor6 = 0;
+void ClientArea::UpdateNetwork(quint8 mask){
+    Sensor1 = 100 *(mask & 0x01);
+    Sensor2 = 50 *(mask>>1 & 0x01);
+    Sensor3 = 25 *(mask>>2 & 0x01);
+    Sensor4 = 12.5 *(mask>>3 & 0x01);
+    Sensor5 = 6.25 *(mask>>4 & 0x01);
+    Sensor6 = 30 *(mask>>5 & 0x01);
+    Sensor7 = 66 *(mask>>6 & 0x01);
+    Sensor8 = 99 *(mask>>7 & 0x01);
 }
 
 void ClientArea::paintEvent(QPaintEvent *)
@@ -156,7 +177,8 @@ void ClientArea::ClientProcess(){
     if(Actuator1 > 0)
         Actuator1 -= 1;
 
-    update(78,78,25,25);
+    UpdateNetwork(bitMask);
+    update();
 }
 void ClientArea::ClientUpdate(QString event){
     //Parse event string

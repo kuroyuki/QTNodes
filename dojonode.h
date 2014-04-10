@@ -24,6 +24,7 @@ public:
     virtual void Process(float timeScale);
     virtual void AddTarget(dojoSynapse* target);
     virtual void AddSource(dojoSynapse* source);
+    virtual float GetFrequency();
 };
 
 class dojoSensor : public dojoNode {

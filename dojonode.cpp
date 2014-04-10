@@ -58,7 +58,7 @@ void dojoNode::Process(float timeScale){
     Voltage += addedVoltage;
 
     //check if threshold
-    if(Voltage>100) {
+    if(Voltage>=100) {
         Voltage = 0;
         RemainVoltage = 0;
         //Generate AP
@@ -83,15 +83,18 @@ void dojoNode::AddTarget(dojoSynapse* target){
 void dojoNode::AddSource(dojoSynapse* source){
     Sources<<source;
 }
+float dojoNode::GetFrequency(){
+   return Voltage;
+}
+
 dojoSensor::dojoSensor(float *data){
     Data = data;
 }
 void dojoSensor::Process(float timeScale){
     //calc current membrane voltage
     Voltage += *Data;
-
     //check if threshold
-    if(Voltage>100) {
+    if(Voltage>=100) {
         Voltage = 0;
         RemainVoltage = 0;
         //Generate AP
@@ -113,9 +116,8 @@ void dojoActuator::Process(float timeScale){
     float addedVoltage = (RemainVoltage+synapseVoltage)*(1-exp(-timeScale/TIME_CONST));
     //calc current membrane voltage
     Voltage += addedVoltage;
-
     //check if threshold
-    if(Voltage>100) {
+    if(Voltage>=100) {
         Voltage = 0;
         RemainVoltage = 0;
         //Generate AP

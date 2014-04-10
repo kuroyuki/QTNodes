@@ -1,11 +1,10 @@
 #ifndef DOJONETWORK_H
 #define DOJONETWORK_H
 
-#define TIME_SCALE 10
+#define TIME_SCALE 20
 
 #include <QObject>
 #include <QHash>
-#include <QJsonObject>
 
 #include "dojonode.h"
 

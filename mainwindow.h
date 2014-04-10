@@ -5,6 +5,7 @@
 #include "terminalwidget.h"
 #include "dojonetwork.h"
 #include "clientarea.h"
+#include "watchwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,6 +21,7 @@ private slots:
 
 private:
     TerminalWidget *terminalWidget;
+    WatchWidget* watchWidget;
 
     dojoNetwork* Dojo;
 

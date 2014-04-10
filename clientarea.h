@@ -25,13 +25,15 @@ public slots:
     void ClientProcess();
     void ClientUpdate(QString event);
 
+signals :
+    void AddToWatch(QString);
 
 protected:
     void paintEvent(QPaintEvent *);
     void keyPressEvent(QKeyEvent *event);
 
 private:
-    void UpdateNetwork();
+    void UpdateNetwork(quint8 mask);
     void resizeImage(QImage *image, const QSize &newSize);    
 
     dojoNetwork* dojoPtr;
@@ -43,7 +45,7 @@ private:
     quint8 originalMask, bitMask;
     int shift;
 
-    float Sensor1, Sensor2, Sensor3,Sensor4,Sensor5,Sensor6;
+    float Sensor1, Sensor2, Sensor3,Sensor4,Sensor5,Sensor6, Sensor7, Sensor8;
     float Actuator1;
 
     QMultiHash<int, QString> Nodes;

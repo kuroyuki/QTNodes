@@ -79,5 +79,6 @@ void dojoNetwork::BindNodes(int source_x, int source_y, int target_x, int target
     emit dojoEvent(event);
 }
 dojoNode* dojoNetwork::GetNodePtr(QString node){
-    return NodeTable[node];
+    dojoNode* nodePtr = this->NodeTable[node];
+    return nodePtr;
 }
