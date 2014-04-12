@@ -3,7 +3,7 @@
 
 #include <QList>
 
-#define TIME_CONST 100 //100 ms The time constants of different neurons typically range from 20 to 50 ms.
+#define TIME_CONST 30 //100 ms The time constants of different neurons typically range from 20 to 50 ms.
 #define LENGHT_CONST 1 //0.5 mm Typical values for neuronal length constants range from 0.1 to 1.0 mm.
 #define PUMP_CONST 1//1 mV per per 1 ms
 
@@ -24,7 +24,7 @@ public:
     virtual void Process(float timeScale);
     virtual void AddTarget(dojoSynapse* target);
     virtual void AddSource(dojoSynapse* source);
-    virtual float GetFrequency();
+    virtual dojoSynapse* GetSynapse(dojoNode* target);
 };
 
 class dojoSensor : public dojoNode {
@@ -66,6 +66,8 @@ private :
 public :
     float GetVoltage(float timeScale);
     void AP(dojoNode* node);
+    float GetCleftValue();
+    dojoNode* GetTarget();
 };
 
 #endif // DOJONODE_H

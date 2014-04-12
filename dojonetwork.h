@@ -1,7 +1,7 @@
 #ifndef DOJONETWORK_H
 #define DOJONETWORK_H
 
-#define TIME_SCALE 20
+#define TIME_SCALE 10
 
 #include <QObject>
 #include <QHash>

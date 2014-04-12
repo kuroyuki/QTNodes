@@ -27,7 +27,7 @@ private :
     dojoNetwork* dojoPtr;
     QTimer* dataTimer;
     QCustomPlot* Plot;
-    dojoNode* Node;
+    dojoSynapse* Synapse;
 };
 
 #endif // WATCHWIDGET_H

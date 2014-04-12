@@ -32,37 +32,9 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 void ClientArea::InitializeNetwork(){
 
     dojoPtr->CreateSensor(&Sensor1, 1,1);
-    dojoPtr->CreateSensor(&Sensor2, 2,1);
-    dojoPtr->CreateSensor(&Sensor3, 3,1);
-    dojoPtr->CreateSensor(&Sensor4, 4,1);
-    dojoPtr->CreateSensor(&Sensor5, 5,1);
-    dojoPtr->CreateSensor(&Sensor6, 6,1);
-    dojoPtr->CreateSensor(&Sensor7, 7,1);
-    dojoPtr->CreateSensor(&Sensor8, 8,1);
+    dojoPtr->CreateActuator(&Actuator1,1,2);
 
-
-    dojoPtr->CreateActuator(&Actuator1, 4,4);
-
-    dojoPtr->CreateNode(4,2);
-    dojoPtr->CreateNode(6,2);
-    dojoPtr->CreateNode(3,2);
-
-    dojoPtr->BindNodes(1,1,3,2);
-    dojoPtr->BindNodes(2,1,3,2);
-    dojoPtr->BindNodes(3,1,3,2);
-    dojoPtr->BindNodes(4,1,3,2);
-
-    dojoPtr->BindNodes(5,1,6,2);
-    dojoPtr->BindNodes(6,1,6,2);
-    dojoPtr->BindNodes(7,1,6,2);
-    dojoPtr->BindNodes(8,1,6,2);
-
-    dojoPtr->BindNodes(3,2,4,2);
-    dojoPtr->BindNodes(6,2,4,2);
-    dojoPtr->BindNodes(4,1,4,2);
-    dojoPtr->BindNodes(5,1,4,2);
-
-    dojoPtr->BindNodes(4,2,4,4);
+    dojoPtr->BindNodes(1,1,1,2);
 
     UpdateNetwork(bitMask);
 }
@@ -74,21 +46,7 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
         shift++;
 
     if(event->key() == Qt::Key_1)
-         emit AddToWatch("1,1");
-    else if(event->key() == Qt::Key_2)
-        emit AddToWatch("2,1");
-    else if(event->key() == Qt::Key_3)
-        emit AddToWatch("3,1");
-    else if(event->key() == Qt::Key_4)
-        emit AddToWatch("4,1");
-    else if(event->key() == Qt::Key_5)
-        emit AddToWatch("3,2");
-    else if(event->key() == Qt::Key_6)
-        emit AddToWatch("6,2");
-    else if(event->key() == Qt::Key_7)
-        emit AddToWatch("4,2");
-    else if(event->key() == Qt::Key_8)
-        emit AddToWatch("4,4");
+         emit AddToWatch("1,1,1,2");
 
     if(shift>0)
         bitMask = originalMask>>shift;

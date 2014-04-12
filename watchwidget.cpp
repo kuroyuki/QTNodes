@@ -13,8 +13,12 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
     setupRealtimeDataDemo(Plot);
     setWidget(Plot);
 }
-void WatchWidget::AddPlot(QString node){
-    Node = dojoPtr->GetNodePtr(node);
+void WatchWidget::AddPlot(QString synapse){
+
+    QStringList list = synapse.split(",");
+    dojoNode* source = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
+    dojoNode* target = dojoPtr->GetNodePtr(list.at(2)+","+list.at(3));
+    Synapse = source->GetSynapse(target);
 
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
     QTimer *timer = new QTimer(this);
@@ -64,7 +68,7 @@ void WatchWidget::Process()
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.01) // at most add point every 10 ms
   {
-      double value0 = Node->GetFrequency();//qSin(key); //sin(key*1.6+cos(key*1.7)*2)*10 + sin(key*1.2+0.56)*20 + 26;
+    double value0 = Synapse->GetCleftValue();
 
     // add data to lines:
     Plot->graph(0)->addData(key, value0);

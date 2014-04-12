@@ -37,8 +37,14 @@ void dojoSynapse::AP(dojoNode* node){
     //if it is Postsynapse
     else if (node == Target){
         //change permability (Hebb rule)
-        Permability = 1/(exp(5-Cleft));
+        Permability = 1;//1/(exp(5-Cleft));
     }
+}
+dojoNode* dojoSynapse::GetTarget(){
+    return Target;
+}
+float dojoSynapse::GetCleftValue(){
+    return Cleft;
 }
 
 dojoNode::dojoNode(){
@@ -83,8 +89,12 @@ void dojoNode::AddTarget(dojoSynapse* target){
 void dojoNode::AddSource(dojoSynapse* source){
     Sources<<source;
 }
-float dojoNode::GetFrequency(){
-   return Voltage;
+dojoSynapse* dojoNode::GetSynapse(dojoNode* target){
+    for (int i = 0; i < Targets.size(); ++i) {
+        if (Targets.at(i)->GetTarget() == target)
+            return Targets.at(i);
+        else return 0;
+    }
 }
 
 dojoSensor::dojoSensor(float *data){
