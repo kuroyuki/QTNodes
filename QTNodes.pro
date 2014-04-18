@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     dojonetwork.cpp \
     clientarea.cpp \
     watchwidget.cpp \
-    ../qcustomplot/qcustomplot.cpp
+    ../qcustomplot/qcustomplot.cpp \
+    dojosynapse.cpp
 
 HEADERS  += mainwindow.h \
     terminalwidget.h \
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h \
     dojonetwork.h \
     clientarea.h \
     watchwidget.h \
-    ../qcustomplot/qcustomplot.h
+    ../qcustomplot/qcustomplot.h \
+    dojosynapse.h
 
 FORMS    += mainwindow.ui

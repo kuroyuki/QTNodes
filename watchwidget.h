@@ -7,7 +7,7 @@
 #include <QImage>
 #include <QPoint>
 #include <QWidget>
-#include "C:/Users/Yuki/Documents/GitHub/qcustomplot/qcustomplot.h"
+#include "C:/Users/Yuki/SkyDrive/GitHub/qcustomplot/qcustomplot.h"
 
 class WatchWidget : public QDockWidget
 {
@@ -19,6 +19,8 @@ signals:
 
 public slots:
     void AddPlot(QString node);
+    void AddSensor(float* value);
+    void AddAct(float* value);
     void Process();
 
 private :
@@ -28,6 +30,11 @@ private :
     QTimer* dataTimer;
     QCustomPlot* Plot;
     dojoSynapse* Synapse;
+
+    float* Sensor;
+    float* Act;
+
+    QTimer *Timer;
 };
 
 #endif // WATCHWIDGET_H

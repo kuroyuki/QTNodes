@@ -8,10 +8,17 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
     dojoPtr = dojo;
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
+    Sensor = 0;
+    Act = 0;
+
     Plot = new QCustomPlot();
     setMinimumHeight(250);
     setupRealtimeDataDemo(Plot);
     setWidget(Plot);
+
+    // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
+    Timer = new QTimer(this);
+    connect(Timer, SIGNAL(timeout()), this, SLOT(Process()));
 }
 void WatchWidget::AddPlot(QString synapse){
 
@@ -21,9 +28,16 @@ void WatchWidget::AddPlot(QString synapse){
     Synapse = source->GetSynapse(target);
 
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(Process()));
-    timer->start(0);
+     Timer->start(0);
+
+}
+void WatchWidget::AddSensor(float* value){
+    Sensor = value;
+    Timer->start(0);
+}
+void WatchWidget::AddAct(float* value){
+    Act = value;
+    Timer->start(0);
 }
 void WatchWidget::setupRealtimeDataDemo(QCustomPlot *Plot)
 {
@@ -42,15 +56,6 @@ void WatchWidget::setupRealtimeDataDemo(QCustomPlot *Plot)
   Plot->graph(1)->setPen(QPen(Qt::red));
   Plot->graph(0)->setChannelFillGraph(Plot->graph(1));
 
-  Plot->addGraph(); // blue dot
-  Plot->graph(2)->setPen(QPen(Qt::blue));
-  Plot->graph(2)->setLineStyle(QCPGraph::lsNone);
-  Plot->graph(2)->setScatterStyle(QCPScatterStyle::ssDisc);
-  Plot->addGraph(); // red dot
-  Plot->graph(3)->setPen(QPen(Qt::red));
-  Plot->graph(3)->setLineStyle(QCPGraph::lsNone);
-  Plot->graph(3)->setScatterStyle(QCPScatterStyle::ssDisc);
-
   Plot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   Plot->xAxis->setDateTimeFormat("hh:mm:ss");
   Plot->xAxis->setAutoTickStep(false);
@@ -68,20 +73,18 @@ void WatchWidget::Process()
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.01) // at most add point every 10 ms
   {
-    double value0 = Synapse->GetCleftValue();
 
     // add data to lines:
-    Plot->graph(0)->addData(key, value0);
-
-    // set data of dots:
-    Plot->graph(2)->clearData();
-    Plot->graph(2)->addData(key, value0);
+    Plot->graph(0)->addData(key, *Sensor);
+    Plot->graph(1)->addData(key, *Act);
 
     // remove data of lines that's outside visible range:
     Plot->graph(0)->removeDataBefore(key-8);
+    Plot->graph(1)->removeDataBefore(key-8);
 
     // rescale value (vertical) axis to fit the current data:
     Plot->graph(0)->rescaleValueAxis();
+    Plot->graph(1)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):

@@ -27,6 +27,8 @@ public slots:
 
 signals :
     void AddToWatch(QString);
+    void SensToWatch(float*);
+    void ActToWatch(float*);
 
 protected:
     void paintEvent(QPaintEvent *);

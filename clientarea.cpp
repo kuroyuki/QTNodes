@@ -31,10 +31,9 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 }
 void ClientArea::InitializeNetwork(){
 
+    dojoPtr->CreateNode(1,1);
     dojoPtr->CreateSensor(&Sensor1, 1,1);
-    dojoPtr->CreateActuator(&Actuator1,1,2);
-
-    dojoPtr->BindNodes(1,1,1,2);
+    dojoPtr->CreateActuator(&Actuator1,1,1);
 
     UpdateNetwork(bitMask);
 }
@@ -45,8 +44,10 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
     else if (event->key() == Qt::Key_Right)
         shift++;
 
-    if(event->key() == Qt::Key_1)
-         emit AddToWatch("1,1,1,2");
+    if(event->key() == Qt::Key_1){
+        emit SensToWatch(&Sensor1);
+        emit ActToWatch(&Actuator1);
+    }
 
     if(shift>0)
         bitMask = originalMask>>shift;
@@ -58,13 +59,21 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
 }
 void ClientArea::UpdateNetwork(quint8 mask){
     Sensor1 = 100 *(mask & 0x01);
-    Sensor2 = 50 *(mask>>1 & 0x01);
-    Sensor3 = 25 *(mask>>2 & 0x01);
-    Sensor4 = 12.5 *(mask>>3 & 0x01);
-    Sensor5 = 6.25 *(mask>>4 & 0x01);
-    Sensor6 = 30 *(mask>>5 & 0x01);
+    Sensor2 = 100 *(mask>>1 & 0x01);
+    Sensor3 = 100 *(mask>>2 & 0x01);
+    Sensor4 = 100 *(mask>>3 & 0x01);
+    Sensor5 = 100 *(mask>>4 & 0x01);
+    Sensor6 = 100 *(mask>>5 & 0x01);
     Sensor7 = 66 *(mask>>6 & 0x01);
     Sensor8 = 99 *(mask>>7 & 0x01);
+
+
+    quint8 i = Actuator1;
+    Actuator1 = i ;
+    if (Actuator1 != 0)
+        Actuator1 -= 1;
+    else
+        Actuator1 = 0;
 }
 
 void ClientArea::paintEvent(QPaintEvent *)
@@ -82,7 +91,7 @@ void ClientArea::paintEvent(QPaintEvent *)
 
         painter.drawRect(290-20*i,120,20,20);
     }
-    quint8 color = Actuator1*255/100;
+    quint8 color = Actuator1;
     painter.setBrush(QColor(color, color, color));
     painter.drawRect(280,280,20,20);
 
@@ -131,10 +140,7 @@ void ClientArea::paintEvent(QPaintEvent *)
         painter.drawRect(30*x,30*y,10,10);
     }
 }
-void ClientArea::ClientProcess(){
-    if(Actuator1 > 0)
-        Actuator1 -= 1;
-
+void ClientArea::ClientProcess(){   
     UpdateNetwork(bitMask);
     update();
 }

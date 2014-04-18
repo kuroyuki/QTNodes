@@ -38,7 +38,11 @@ void dojoNetwork::CreateNode(int x, int y){
 }
 void dojoNetwork::CreateSensor(float* data, int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
-    NodeTable[string] = new dojoSensor(data);
+    dojoNode* target = NodeTable[string];
+
+    dojoSensorSynapse* synapse = new dojoSensorSynapse(data, target);
+
+    target->AddSource(synapse);
 
     QString event;
     event += "2," + QString::number(x)+','+QString::number(y);
@@ -48,7 +52,11 @@ void dojoNetwork::CreateSensor(float* data, int x, int y){
 
 void dojoNetwork::CreateActuator(float* data, int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
-    NodeTable[string] = new dojoActuator(data);
+    dojoNode* source = NodeTable[string];
+
+    dojoMotorSynapse* synapse = new dojoMotorSynapse(source, data, 100);
+
+    source->AddTarget(synapse);
 
     QString event;
     event += "3," + QString::number(x)+','+QString::number(y);
@@ -68,7 +76,7 @@ void dojoNetwork::BindNodes(int source_x, int source_y, int target_x, int target
     float y = abs(target_y - source_y);
     float length = sqrt(x*x + y*y);
 
-    dojoSynapse* synapse = new dojoSynapse(source, target, length);
+    dojoSynapse* synapse = new dojoChemicalSynapse(source, target, length);
 
     source->AddTarget(synapse);
     target->AddSource(synapse);
