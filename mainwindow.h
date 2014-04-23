@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "terminalwidget.h"
-#include "dojonetwork.h"
+#include "dojo/dojonetwork.h"
 #include "clientarea.h"
 #include "watchwidget.h"
 

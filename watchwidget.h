@@ -2,12 +2,12 @@
 #define WATCHWIDGET_H
 
 #include <QDockWidget>
-#include "dojonetwork.h"
+#include "dojo/dojonetwork.h"
 #include <QColor>
 #include <QImage>
 #include <QPoint>
 #include <QWidget>
-#include "C:/Users/Yuki/SkyDrive/GitHub/qcustomplot/qcustomplot.h"
+#include "../qcustomplot/qcustomplot.h"
 
 class WatchWidget : public QDockWidget
 {
@@ -29,7 +29,7 @@ private :
     dojoNetwork* dojoPtr;
     QTimer* dataTimer;
     QCustomPlot* Plot;
-    dojoSynapse* Synapse;
+    dojoNode* Node;
 
     float* Sensor;
     float* Act;

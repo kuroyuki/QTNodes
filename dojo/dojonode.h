@@ -13,17 +13,20 @@ class dojoNode;
 //dojo Nodes
 class dojoNode
 {
-protected:
+private:
     float Voltage;
+    float RemainVoltage;
+    int Sign;
 
     QList <dojoSynapse*> Sources;
     QList <dojoSynapse*> Targets;
 
 public:
-    dojoNode();
+    dojoNode(int sign);
     virtual void Process(float timeScale);
     virtual void AddTarget(dojoSynapse* target);
     virtual void AddSource(dojoSynapse* source);
     virtual dojoSynapse* GetSynapse(dojoNode* target);
+    float GetVoltage();
 };
 #endif // DOJONODE_H

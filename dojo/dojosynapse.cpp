@@ -59,7 +59,7 @@ dojoChemicalSynapse::dojoChemicalSynapse(dojoNode* source, dojoNode* target, flo
 
     Terminals = 100;
     Cleft = 0;
-    Permability = 1;
+    Permability = 5;
 }
 
 float dojoChemicalSynapse::GetVoltage(float timeScale){
@@ -90,7 +90,7 @@ void dojoChemicalSynapse::AP(dojoNode* node, float timeScale){
     //if it is Postsynapse
     else if (node == Target){
         //change permability (Hebb rule)
-        Permability = 1;//1/(exp(5-Cleft));
+        Permability = 5;//1/(exp(5-Cleft));
     }
 }
 dojoNode* dojoChemicalSynapse::GetTarget(){

@@ -14,21 +14,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    terminalwidget.cpp \
-    dojonode.cpp \
-    dojonetwork.cpp \
+    terminalwidget.cpp \    
     clientarea.cpp \
     watchwidget.cpp \
-    ../qcustomplot/qcustomplot.cpp \
-    dojosynapse.cpp
+    ../qcustomplot/qcustomplot.cpp \    
+    dojo/dojosynapse.cpp \
+    dojo/dojonode.cpp \
+    dojo/dojonetwork.cpp
 
 HEADERS  += mainwindow.h \
-    terminalwidget.h \
-    dojonode.h \
-    dojonetwork.h \
+    terminalwidget.h \   
     clientarea.h \
     watchwidget.h \
     ../qcustomplot/qcustomplot.h \
-    dojosynapse.h
+    dojo/dojosynapse.h \
+    dojo/dojonode.h \
+    dojo/dojonetwork.h
 
 FORMS    += mainwindow.ui

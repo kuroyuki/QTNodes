@@ -1,8 +1,9 @@
 #include "dojonode.h"
 #include "math.h"
 
-dojoNode::dojoNode(){
+dojoNode::dojoNode(int sign){
     Voltage = 0;
+    Sign = sign;
 }
 
 void dojoNode::Process(float timeScale){
@@ -11,14 +12,17 @@ void dojoNode::Process(float timeScale){
     for (int i = 0; i < Sources.size(); ++i) {
         synapseVoltage += Sources[i]->GetVoltage(timeScale);
     }
+    RemainVoltage += synapseVoltage;
     //calc adding voltage depends on current synaptic and previously remained
-    float addedVoltage = synapseVoltage*(1-exp(-timeScale/TIME_CONST));
+    float addedVoltage = RemainVoltage*(1-exp(-timeScale/TIME_CONST));
     //calc current membrane voltage
     Voltage += addedVoltage;
+    RemainVoltage -= addedVoltage;
 
     //check if threshold
     if(Voltage>=100) {
         Voltage = 0;
+        RemainVoltage = -10;
 
         //Generate AP
         for (int i = 0; i < Targets.size(); ++i) {
@@ -31,7 +35,7 @@ void dojoNode::Process(float timeScale){
     //not AP
     else {
         if(Voltage>0) Voltage -= timeScale * PUMP_CONST;
-        else Voltage = timeScale * PUMP_CONST;
+        else Voltage += timeScale * PUMP_CONST;
     }
 }
 
@@ -49,4 +53,8 @@ dojoSynapse* dojoNode::GetSynapse(dojoNode* target){
             return Targets.at(i);
     }
     return 0;
+}
+float dojoNode::GetVoltage(){
+    if(RemainVoltage > 0) return 0;
+   else return 100;
 }

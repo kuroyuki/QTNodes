@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ConsoleOutput("watchWidget created...");
     connect(clientArea, SIGNAL(SensToWatch(float*)), watchWidget, SLOT(AddSensor(float*)));
     connect(clientArea, SIGNAL(ActToWatch(float*)), watchWidget, SLOT(AddAct(float*)));
+    connect(clientArea, SIGNAL(AddToWatch(QString)), watchWidget, SLOT(AddPlot(QString)));
 
     clientArea->InitializeNetwork();
 

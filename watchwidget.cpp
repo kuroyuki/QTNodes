@@ -23,9 +23,8 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
 void WatchWidget::AddPlot(QString synapse){
 
     QStringList list = synapse.split(",");
-    dojoNode* source = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
-    dojoNode* target = dojoPtr->GetNodePtr(list.at(2)+","+list.at(3));
-    Synapse = source->GetSynapse(target);
+    dojoNode* node = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
+    Node = node;
 
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
      Timer->start(0);
@@ -50,11 +49,15 @@ void WatchWidget::setupRealtimeDataDemo(QCustomPlot *Plot)
 
   Plot->addGraph(); // blue line
   Plot->graph(0)->setPen(QPen(Qt::blue));
-  Plot->graph(0)->setBrush(QBrush(QColor(240, 255, 200)));
+  //Plot->graph(0)->setBrush(QBrush(QColor(240, 255, 200)));
   Plot->graph(0)->setAntialiasedFill(false);
   Plot->addGraph(); // red line
   Plot->graph(1)->setPen(QPen(Qt::red));
-  Plot->graph(0)->setChannelFillGraph(Plot->graph(1));
+  //Plot->graph(0)->setChannelFillGraph(Plot->graph(1));
+
+
+  Plot->addGraph(); // green line
+  Plot->graph(2)->setPen(QPen(Qt::green));
 
   Plot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   Plot->xAxis->setDateTimeFormat("hh:mm:ss");
@@ -73,18 +76,21 @@ void WatchWidget::Process()
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.01) // at most add point every 10 ms
   {
-
+    float value = Node->GetVoltage();
     // add data to lines:
     Plot->graph(0)->addData(key, *Sensor);
     Plot->graph(1)->addData(key, *Act);
+    Plot->graph(2)->addData(key, value);
 
     // remove data of lines that's outside visible range:
     Plot->graph(0)->removeDataBefore(key-8);
     Plot->graph(1)->removeDataBefore(key-8);
+    Plot->graph(2)->removeDataBefore(key-8);
 
     // rescale value (vertical) axis to fit the current data:
     Plot->graph(0)->rescaleValueAxis();
     Plot->graph(1)->rescaleValueAxis(true);
+    Plot->graph(2)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):

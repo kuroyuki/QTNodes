@@ -22,6 +22,8 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
     originalMask = 7;
     shift = 0;
     bitMask = originalMask;
+    stop = false;
+    counter = 0;
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(ClientProcess()));
@@ -32,7 +34,11 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 void ClientArea::InitializeNetwork(){
 
     dojoPtr->CreateNode(1,1);
+    dojoPtr->CreateNode(2,1);
     dojoPtr->CreateSensor(&Sensor1, 1,1);
+    dojoPtr->CreateSensor(&Sensor1, 2,1);
+
+    dojoPtr->BindNodes(2,1,1,1);
     dojoPtr->CreateActuator(&Actuator1,1,1);
 
     UpdateNetwork(bitMask);
@@ -43,8 +49,13 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
         shift--;
     else if (event->key() == Qt::Key_Right)
         shift++;
+    else if (event->key() == Qt::Key_Up)
+        stop = true;
+    else if (event->key() == Qt::Key_Down)
+        stop = false;
 
     if(event->key() == Qt::Key_1){
+        emit AddToWatch("1,1");
         emit SensToWatch(&Sensor1);
         emit ActToWatch(&Actuator1);
     }
@@ -58,22 +69,27 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
     update();
 }
 void ClientArea::UpdateNetwork(quint8 mask){
-    Sensor1 = 100 *(mask & 0x01);
-    Sensor2 = 100 *(mask>>1 & 0x01);
-    Sensor3 = 100 *(mask>>2 & 0x01);
-    Sensor4 = 100 *(mask>>3 & 0x01);
-    Sensor5 = 100 *(mask>>4 & 0x01);
-    Sensor6 = 100 *(mask>>5 & 0x01);
-    Sensor7 = 66 *(mask>>6 & 0x01);
-    Sensor8 = 99 *(mask>>7 & 0x01);
+    quint8 value;
+    counter++;
 
+    if(stop) value = 0;
+    else if((counter == 8)|| (counter == 9))//|| (counter == 12))
+        value = 50;
 
-    quint8 i = Actuator1;
-    Actuator1 = i ;
-    if (Actuator1 != 0)
-        Actuator1 -= 1;
-    else
-        Actuator1 = 0;
+    if(counter>12) counter = 0;
+
+    Sensor1 = value *(mask & 0x01);
+    Sensor2 = 0 *(mask>>1 & 0x01);
+    Sensor3 = value *(mask>>2 & 0x01);
+    Sensor4 = value *(mask>>3 & 0x01);
+    Sensor5 = value *(mask>>4 & 0x01);
+    Sensor6 = value *(mask>>5 & 0x01);
+
+    if (Actuator1 > 255)
+        Actuator1 = 255;
+    else if(Actuator1 == 0)
+        Actuator1 = 1;
+    Actuator1--;
 }
 
 void ClientArea::paintEvent(QPaintEvent *)

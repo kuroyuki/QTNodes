@@ -29,7 +29,7 @@ void dojoNetwork::Process(){
 
 void dojoNetwork::CreateNode(int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
-    NodeTable[string] = new dojoNode();
+    NodeTable[string] = new dojoNode(1);
 
     QString event;
     event += "1," + QString::number(x)+','+QString::number(y);
@@ -54,7 +54,7 @@ void dojoNetwork::CreateActuator(float* data, int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
     dojoNode* source = NodeTable[string];
 
-    dojoMotorSynapse* synapse = new dojoMotorSynapse(source, data, 100);
+    dojoMotorSynapse* synapse = new dojoMotorSynapse(source, data, 255);
 
     source->AddTarget(synapse);
 
