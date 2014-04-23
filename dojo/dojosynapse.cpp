@@ -17,9 +17,6 @@ float dojoSensorSynapse::GetVoltage(float timeScale){
 void dojoSensorSynapse::AP(dojoNode *node, float timeScale){
     return;
 }
-float dojoSensorSynapse::GetCleftValue(){
-    return *Source;
-}
 dojoNode* dojoSensorSynapse::GetTarget(){
     return Target;
 }
@@ -41,9 +38,6 @@ void dojoMotorSynapse::AP(dojoNode* node, float timeScale){
     *Target += Terminals;
 }
 
-float dojoMotorSynapse::GetCleftValue(){
-   return *Target;
-}
 dojoNode* dojoMotorSynapse::GetTarget(){
     return Source;
 }
@@ -95,7 +89,4 @@ void dojoChemicalSynapse::AP(dojoNode* node, float timeScale){
 }
 dojoNode* dojoChemicalSynapse::GetTarget(){
     return Target;
-}
-float dojoChemicalSynapse::GetCleftValue(){
-    return Cleft;
 }

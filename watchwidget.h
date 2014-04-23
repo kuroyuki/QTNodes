@@ -24,15 +24,14 @@ public slots:
     void Process();
 
 private :
+    void AddGraph(float* value, QString name, QColor color);
     void setupRealtimeDataDemo(QCustomPlot *customPlot);
 
     dojoNetwork* dojoPtr;
-    QTimer* dataTimer;
-    QCustomPlot* Plot;
-    dojoNode* Node;
 
-    float* Sensor;
-    float* Act;
+    QCustomPlot* Plot;
+
+    QHash <float*, QCPGraph*> graphTable;
 
     QTimer *Timer;
 };

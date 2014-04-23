@@ -27,6 +27,6 @@ public:
     virtual void AddTarget(dojoSynapse* target);
     virtual void AddSource(dojoSynapse* source);
     virtual dojoSynapse* GetSynapse(dojoNode* target);
-    float GetVoltage();
+    float* GetVoltagePtr();
 };
 #endif // DOJONODE_H

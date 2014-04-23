@@ -54,7 +54,6 @@ dojoSynapse* dojoNode::GetSynapse(dojoNode* target){
     }
     return 0;
 }
-float dojoNode::GetVoltage(){
-    if(RemainVoltage > 0) return 0;
-   else return 100;
+float* dojoNode::GetVoltagePtr(){
+    return &Voltage;
 }

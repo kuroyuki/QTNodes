@@ -34,12 +34,17 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 void ClientArea::InitializeNetwork(){
 
     dojoPtr->CreateNode(1,1);
-    dojoPtr->CreateNode(2,1);
-    dojoPtr->CreateSensor(&Sensor1, 1,1);
-    dojoPtr->CreateSensor(&Sensor1, 2,1);
+    dojoPtr->CreateNode(1,2);
+    dojoPtr->BindNodes(1,1,1,2);
 
-    dojoPtr->BindNodes(2,1,1,1);
-    dojoPtr->CreateActuator(&Actuator1,1,1);
+    dojoPtr->CreateSensor(&Sensor1, 1,1);
+    dojoPtr->CreateSensor(&Sensor2, 1,1);
+    dojoPtr->CreateActuator(&Actuator1,1,2);
+
+    emit SensToWatch(&Sensor1);
+    //emit ActToWatch(&Actuator1);
+    //emit AddToWatch("1,1");
+    emit AddToWatch("1,2");
 
     UpdateNetwork(bitMask);
 }
@@ -56,9 +61,8 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
 
     if(event->key() == Qt::Key_1){
         emit AddToWatch("1,1");
-        emit SensToWatch(&Sensor1);
-        emit ActToWatch(&Actuator1);
     }
+
 
     if(shift>0)
         bitMask = originalMask>>shift;
@@ -73,13 +77,13 @@ void ClientArea::UpdateNetwork(quint8 mask){
     counter++;
 
     if(stop) value = 0;
-    else if((counter == 8)|| (counter == 9))//|| (counter == 12))
+    else if((counter == 0)|| (counter == 2))// || (counter == 2))
         value = 50;
 
-    if(counter>12) counter = 0;
+    if(counter>20) counter = 0;
 
     Sensor1 = value *(mask & 0x01);
-    Sensor2 = 0 *(mask>>1 & 0x01);
+    Sensor2 = value *(mask>>1 & 0x01);
     Sensor3 = value *(mask>>2 & 0x01);
     Sensor4 = value *(mask>>3 & 0x01);
     Sensor5 = value *(mask>>4 & 0x01);

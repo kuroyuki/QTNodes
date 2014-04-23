@@ -8,9 +8,6 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
     dojoPtr = dojo;
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
-    Sensor = 0;
-    Act = 0;
-
     Plot = new QCustomPlot();
     setMinimumHeight(250);
     setupRealtimeDataDemo(Plot);
@@ -19,25 +16,35 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
     Timer = new QTimer(this);
     connect(Timer, SIGNAL(timeout()), this, SLOT(Process()));
+    // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
+    Timer->start(0);
 }
 void WatchWidget::AddPlot(QString synapse){
 
     QStringList list = synapse.split(",");
-    dojoNode* node = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
-    Node = node;
+    dojoNode* source = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
 
-    // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
-     Timer->start(0);
-
+    quint8 a = (quint8) qrand();
+    AddGraph(source->GetVoltagePtr(), synapse, QColor(0,a,a));
 }
 void WatchWidget::AddSensor(float* value){
-    Sensor = value;
-    Timer->start(0);
+    AddGraph(value, "sensor", Qt::green);
 }
 void WatchWidget::AddAct(float* value){
-    Act = value;
-    Timer->start(0);
+    AddGraph(value, "act", Qt::red);
 }
+void WatchWidget::AddGraph(float* value, QString name, QColor color){
+    if(!graphTable[value]){
+
+        QCPGraph* graph =  Plot->addGraph(); // blue line
+        graph->setBrush(Qt::NoBrush);
+        graph->setPen(QPen(color));
+        graph->setName(name);
+
+        graphTable[value] = graph;
+    }
+}
+
 void WatchWidget::setupRealtimeDataDemo(QCustomPlot *Plot)
 {
   Plot->setNotAntialiasedElements(QCP::aeAll);
@@ -46,18 +53,6 @@ void WatchWidget::setupRealtimeDataDemo(QCustomPlot *Plot)
   Plot->xAxis->setTickLabelFont(font);
   Plot->yAxis->setTickLabelFont(font);
   Plot->legend->setFont(font);
-
-  Plot->addGraph(); // blue line
-  Plot->graph(0)->setPen(QPen(Qt::blue));
-  //Plot->graph(0)->setBrush(QBrush(QColor(240, 255, 200)));
-  Plot->graph(0)->setAntialiasedFill(false);
-  Plot->addGraph(); // red line
-  Plot->graph(1)->setPen(QPen(Qt::red));
-  //Plot->graph(0)->setChannelFillGraph(Plot->graph(1));
-
-
-  Plot->addGraph(); // green line
-  Plot->graph(2)->setPen(QPen(Qt::green));
 
   Plot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   Plot->xAxis->setDateTimeFormat("hh:mm:ss");
@@ -76,21 +71,15 @@ void WatchWidget::Process()
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.01) // at most add point every 10 ms
   {
-    float value = Node->GetVoltage();
-    // add data to lines:
-    Plot->graph(0)->addData(key, *Sensor);
-    Plot->graph(1)->addData(key, *Act);
-    Plot->graph(2)->addData(key, value);
-
-    // remove data of lines that's outside visible range:
-    Plot->graph(0)->removeDataBefore(key-8);
-    Plot->graph(1)->removeDataBefore(key-8);
-    Plot->graph(2)->removeDataBefore(key-8);
-
-    // rescale value (vertical) axis to fit the current data:
-    Plot->graph(0)->rescaleValueAxis();
-    Plot->graph(1)->rescaleValueAxis(true);
-    Plot->graph(2)->rescaleValueAxis(true);
+    QHashIterator<float*, QCPGraph*> i(graphTable);
+    while (i.hasNext()) {
+      i.next();
+      double a;
+      a = (double) *i.key();
+      i.value()->addData(key, a);
+      i.value()->removeDataBefore(key-8);
+      i.value()->rescaleValueAxis(true);
+    }
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):

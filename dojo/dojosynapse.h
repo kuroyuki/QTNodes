@@ -11,7 +11,6 @@ public:
     dojoSynapse();
     virtual float GetVoltage(float timeScale) = 0;
     virtual void AP(dojoNode* node, float timeScale) = 0;
-    virtual float GetCleftValue() = 0;
     virtual dojoNode* GetTarget() = 0;
 };
 //dojo Synapses
@@ -22,7 +21,6 @@ public :
 
     float GetVoltage(float timeScale);
     void AP(dojoNode* node, float timeScale);
-    float GetCleftValue();
     dojoNode* GetTarget();
 
 private :
@@ -35,7 +33,6 @@ public:
 
     float GetVoltage(float timeScale);
     void AP(dojoNode* node, float timeScale);
-    float GetCleftValue();
     dojoNode* GetTarget() ;
 private :
     dojoNode* Source;
@@ -50,15 +47,16 @@ public:
 
     float GetVoltage(float timeScale);
     void AP(dojoNode* node, float timeScale);
-    float GetCleftValue();
     dojoNode* GetTarget();
+
+    float Cleft;
 
 private :
     dojoNode* Source;
     dojoNode* Target;
 
     float Terminals;
-    float Cleft;
+
     float Permability;
     float Distance;
 };
