@@ -23,12 +23,9 @@ public :
 
 public slots:
     void ClientProcess();
-    void ClientUpdate(QString event);
 
 signals :
-    void AddToWatch(QString);
-    void SensToWatch(float*);
-    void ActToWatch(float*);
+    void AddToWatch(float* value, QString name, QColor color);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -39,10 +36,6 @@ private:
     void resizeImage(QImage *image, const QSize &newSize);    
 
     dojoNetwork* dojoPtr;
-
-    QPoint rectCenter;
-    QPoint viewCenter;
-    float viewDirection;
 
     quint8 originalMask, bitMask;
     int shift;

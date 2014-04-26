@@ -13,21 +13,17 @@ class WatchWidget : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit WatchWidget(dojoNetwork* dojo = 0);
+    explicit WatchWidget();
 
 signals:
+    void AddToTerminal(QString string);
 
 public slots:
-    void AddPlot(QString node);
-    void AddSensor(float* value);
-    void AddAct(float* value);
+    void AddGraph(float* value, QString name, QColor color);
     void Process();
 
 private :
-    void AddGraph(float* value, QString name, QColor color);
     void setupRealtimeDataDemo(QCustomPlot *customPlot);
-
-    dojoNetwork* dojoPtr;
 
     QCustomPlot* Plot;
 

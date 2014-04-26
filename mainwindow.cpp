@@ -5,7 +5,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-
     terminalWidget = new TerminalWidget();
     addDockWidget(Qt::RightDockWidgetArea, terminalWidget);
     ConsoleOutput("terminalWidget created...");    
@@ -15,17 +14,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ConsoleOutput("dojoNetwork created...");
 
     clientArea = new ClientArea(this, Dojo);
-    setCentralWidget(clientArea);
+    QDockWidget* dockWidget = new QDockWidget();
+    dockWidget->setWidget(clientArea);
+    addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
     ConsoleOutput("client area created...");
-    connect(Dojo, SIGNAL(dojoEvent(QString)), clientArea, SLOT(ClientUpdate(QString)));
 
-    watchWidget = new WatchWidget(Dojo);
+    graphicWidget = new GraphWidget();
+    setCentralWidget(graphicWidget);
+    connect(Dojo, SIGNAL(dojoEvent(QString)), graphicWidget, SLOT(graphUpdate(QString)));
+    ConsoleOutput("graphicWidget created...");
+
+    watchWidget = new WatchWidget();
     addDockWidget(Qt::BottomDockWidgetArea, watchWidget);
     ConsoleOutput("watchWidget created...");
-    connect(clientArea, SIGNAL(SensToWatch(float*)), watchWidget, SLOT(AddSensor(float*)));
-    connect(clientArea, SIGNAL(ActToWatch(float*)), watchWidget, SLOT(AddAct(float*)));
-    connect(clientArea, SIGNAL(AddToWatch(QString)), watchWidget, SLOT(AddPlot(QString)));
-
+    connect(clientArea, SIGNAL(AddToWatch(float*,QString,QColor)),watchWidget, SLOT(AddGraph(float*,QString,QColor)));
+    connect(watchWidget, SIGNAL(AddToTerminal(QString)), terminalWidget, SLOT(AddText(QString)));
     clientArea->InitializeNetwork();
 
     createActions();

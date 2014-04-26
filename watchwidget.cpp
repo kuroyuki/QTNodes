@@ -2,11 +2,10 @@
 #include "watchwidget.h"
 #include <QTimer>
 
-WatchWidget::WatchWidget(dojoNetwork* dojo) :
+WatchWidget::WatchWidget() :
     QDockWidget()
 {
-    dojoPtr = dojo;
-    setAllowedAreas(Qt::BottomDockWidgetArea);
+   setAllowedAreas(Qt::BottomDockWidgetArea);
 
     Plot = new QCustomPlot();
     setMinimumHeight(250);
@@ -17,21 +16,7 @@ WatchWidget::WatchWidget(dojoNetwork* dojo) :
     Timer = new QTimer(this);
     connect(Timer, SIGNAL(timeout()), this, SLOT(Process()));
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
-    Timer->start(0);
-}
-void WatchWidget::AddPlot(QString synapse){
-
-    QStringList list = synapse.split(",");
-    dojoNode* source = dojoPtr->GetNodePtr(list.at(0)+","+list.at(1));
-
-    quint8 a = (quint8) qrand();
-    AddGraph(source->GetVoltagePtr(), synapse, QColor(0,a,a));
-}
-void WatchWidget::AddSensor(float* value){
-    AddGraph(value, "sensor", Qt::green);
-}
-void WatchWidget::AddAct(float* value){
-    AddGraph(value, "act", Qt::red);
+    Timer->start(1);
 }
 void WatchWidget::AddGraph(float* value, QString name, QColor color){
     if(!graphTable[value]){
@@ -42,6 +27,8 @@ void WatchWidget::AddGraph(float* value, QString name, QColor color){
         graph->setName(name);
 
         graphTable[value] = graph;
+
+        emit AddToTerminal(name+" added to Watch list");
     }
 }
 

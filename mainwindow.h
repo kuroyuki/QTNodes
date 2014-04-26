@@ -6,6 +6,7 @@
 #include "dojo/dojonetwork.h"
 #include "clientarea.h"
 #include "watchwidget.h"
+#include "graph/graphwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +23,7 @@ private slots:
 private:
     TerminalWidget *terminalWidget;
     WatchWidget* watchWidget;
+    GraphWidget* graphicWidget;
 
     dojoNetwork* Dojo;
 

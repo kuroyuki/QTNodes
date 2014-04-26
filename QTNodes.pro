@@ -20,7 +20,10 @@ SOURCES += main.cpp\
     ../qcustomplot/qcustomplot.cpp \    
     dojo/dojosynapse.cpp \
     dojo/dojonode.cpp \
-    dojo/dojonetwork.cpp
+    dojo/dojonetwork.cpp \
+    graph/node.cpp \
+    graph/graphwidget.cpp \
+    graph/edge.cpp
 
 HEADERS  += mainwindow.h \
     terminalwidget.h \   
@@ -29,6 +32,9 @@ HEADERS  += mainwindow.h \
     ../qcustomplot/qcustomplot.h \
     dojo/dojosynapse.h \
     dojo/dojonode.h \
-    dojo/dojonetwork.h
+    dojo/dojonetwork.h \
+    graph/node.h \
+    graph/graphwidget.h \
+    graph/edge.h
 
 FORMS    += mainwindow.ui
