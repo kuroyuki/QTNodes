@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     clientArea = new ClientArea(this, Dojo);
     QDockWidget* dockWidget = new QDockWidget();
     dockWidget->setWidget(clientArea);
+    dockWidget->setWindowTitle("Client area");
     addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
     ConsoleOutput("client area created...");
 

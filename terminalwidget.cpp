@@ -3,7 +3,8 @@
 
 TerminalWidget::TerminalWidget(QDockWidget *parent) :
     QDockWidget(parent)
-{    
+{
+    setWindowTitle("Terminal");
     TextOutput = new QTextEdit();
 
     QPalette palette;
@@ -38,7 +39,7 @@ void TerminalWidget::ParseEvent(QString event){
             AddText("bind nodes "+list.at(1)+","+list.at(2)+" and "+list.at(3)+","+list.at(4));
             break;
         default :
-            AddText("unknown message");
+            AddText(event);
             break;
     }
 }

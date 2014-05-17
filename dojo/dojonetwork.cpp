@@ -37,6 +37,9 @@ void dojoNetwork::LoadNetwork(QString name){
        BindNodes(source_x,source_y,target_x,target_y);
     }
     configFile.close();
+    QString event;
+    event = "5," + name;
+    emit dojoEvent(event);
 
 }
 

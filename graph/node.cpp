@@ -87,5 +87,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseReleaseEvent(event);
 }
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
-    graph->AddNodeToWatch(this, color);
+    if(x()<0 || y()<0)
+        return;
+    else graph->AddNodeToWatch(this, color);
 }

@@ -5,6 +5,7 @@
 WatchWidget::WatchWidget() :
     QDockWidget()
 {
+    setWindowTitle("Watch");
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
     QGridLayout *layout = new QGridLayout;

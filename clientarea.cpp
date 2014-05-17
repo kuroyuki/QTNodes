@@ -31,12 +31,6 @@ void ClientArea::BindNetwork(){
     dojoPtr->CreateSensor(&Sensor2, 2,1);
     dojoPtr->CreateActuator(&Actuator1,1,2);
 
-    emit AddToWatch(&Sensor1, "sensor1", Qt::red);
-    //emit AddToWatch(dojoPtr->GetNodePtr("1,1")->GetVoltagePtr(), "1,1", Qt::blue);
-    emit AddToWatch(dojoPtr->GetNodePtr("1,2")->GetVoltagePtr(), "1,2", Qt::green);
-    //emit AddToWatch(&Actuator1, "motor1", Qt::black);
-
-
     UpdateNetwork(bitMask);
 }
 
