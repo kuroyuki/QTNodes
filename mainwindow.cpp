@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addDockWidget(Qt::RightDockWidgetArea, terminalWidget);
     ConsoleOutput("terminalWidget created...");    
 
-    Dojo = new dojoNetwork();
+    Dojo = new dojoNetwork(this);
     connect(Dojo, SIGNAL(dojoEvent(QString)), terminalWidget, SLOT(ParseEvent(QString)));
     ConsoleOutput("dojoNetwork created...");
 
@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
     ConsoleOutput("client area created...");
 
-    graphicWidget = new GraphWidget();
+    graphicWidget = new GraphWidget(this, Dojo);
     setCentralWidget(graphicWidget);
     connect(Dojo, SIGNAL(dojoEvent(QString)), graphicWidget, SLOT(graphUpdate(QString)));
     ConsoleOutput("graphicWidget created...");
@@ -27,15 +27,20 @@ MainWindow::MainWindow(QWidget *parent) :
     watchWidget = new WatchWidget();
     addDockWidget(Qt::BottomDockWidgetArea, watchWidget);
     ConsoleOutput("watchWidget created...");
-    connect(clientArea, SIGNAL(AddToWatch(float*,QString,QColor)),watchWidget, SLOT(AddGraph(float*,QString,QColor)));
+    connect(graphicWidget, SIGNAL(AddToWatch(float*,QString,QColor)),watchWidget, SLOT(AddGraph(float*,QString,QColor)));
     connect(watchWidget, SIGNAL(AddToTerminal(QString)), terminalWidget, SLOT(AddText(QString)));
-    clientArea->InitializeNetwork();
+
+    //Load dojoNetwork config
+    QString name = "network_1";
+    Dojo->LoadNetwork(name);
+    //bind network with external variables
+    clientArea->BindNetwork();
 
     createActions();
     createMenus();
 
     setWindowTitle(tr("dojoNodes"));
-    resize(1200, 600);
+    setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()

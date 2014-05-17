@@ -5,12 +5,26 @@
 WatchWidget::WatchWidget() :
     QDockWidget()
 {
-   setAllowedAreas(Qt::BottomDockWidgetArea);
+    setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(new QLabel(tr("Watching nodes:")), 1,1);
+
+    watchingList =  new QComboBox();
+    watchingList->setInsertPolicy(QComboBox::InsertAtTop);
+    layout->addWidget(watchingList, 1,2);
 
     Plot = new QCustomPlot();
+
     setMinimumHeight(250);
     setupRealtimeDataDemo(Plot);
-    setWidget(Plot);
+    layout->addWidget(Plot, 2,1,2,8);
+
+    layout->setSizeConstraint(QLayout::SetMinimumSize);
+
+    QWidget* child = new QWidget();
+    child->setLayout(layout);
+    setWidget(child);
 
     // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
     Timer = new QTimer(this);
@@ -28,7 +42,14 @@ void WatchWidget::AddGraph(float* value, QString name, QColor color){
 
         graphTable[value] = graph;
 
+        watchingList->addItem(name);
+
         emit AddToTerminal(name+" added to Watch list");
+    }
+    else{
+        graphTable.remove(value);
+        watchingList->removeItem(watchingList->findText(name));
+        emit AddToTerminal(name+" removed from Watch list");
     }
 }
 

@@ -25,14 +25,10 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 
     grabKeyboard();
 }
-void ClientArea::InitializeNetwork(){
-
-    dojoPtr->CreateNode(1,1);
-    dojoPtr->CreateNode(1,2);
-    dojoPtr->BindNodes(1,1,1,2);
+void ClientArea::BindNetwork(){
 
     dojoPtr->CreateSensor(&Sensor1, 1,1);
-    dojoPtr->CreateSensor(&Sensor2, 1,1);
+    dojoPtr->CreateSensor(&Sensor2, 2,1);
     dojoPtr->CreateActuator(&Actuator1,1,2);
 
     emit AddToWatch(&Sensor1, "sensor1", Qt::red);

@@ -20,7 +20,6 @@ public:
     enum { Type = UserType + 1 };
     int type() const { return Type; }
 
-    void calculateForces();
     bool advance();
 
     QRectF boundingRect() const;
@@ -32,12 +31,13 @@ protected:
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     QList<Edge *> edgeList;
     QPointF newPos;
     GraphWidget *graph;
+    QColor color;
 };
 
 #endif // NODE_H

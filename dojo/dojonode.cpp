@@ -5,6 +5,9 @@ dojoNode::dojoNode(int sign){
     Voltage = 0;
     Sign = sign;
 }
+dojoNode::~dojoNode(){
+
+}
 
 void dojoNode::Process(float timeScale){
     //Collect voltage from all source Synapses

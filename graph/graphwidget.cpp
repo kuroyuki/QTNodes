@@ -3,12 +3,13 @@
 #include <math.h>
 #include <QKeyEvent>
 
-GraphWidget::GraphWidget(QWidget *parent)
+GraphWidget::GraphWidget(QWidget *parent, dojoNetwork* dojo)
     : QGraphicsView(parent)
 {
+    dojoPtr = dojo;
     scene = new QGraphicsScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    scene->setSceneRect(-200, -200, 400, 400);
+    scene->setSceneRect(0, 0, 700, 500);
     setScene(scene);
     setCacheMode(CacheBackground);
     setViewportUpdateMode(BoundingRectViewportUpdate);
@@ -18,6 +19,8 @@ GraphWidget::GraphWidget(QWidget *parent)
     setMinimumSize(400, 400);
     setWindowTitle(tr("Elastic Nodes"));
 
+    addNode(0,-1);
+    addNode(-1,0);
 }
 
 void GraphWidget::itemMoved()
@@ -62,21 +65,6 @@ void GraphWidget::drawBackground(QPainter *painter, const QRectF &rect)
     painter->fillRect(rect.intersected(sceneRect), gradient);
     painter->setBrush(Qt::NoBrush);
     painter->drawRect(sceneRect);
-
-    // Text
-    QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
-                    sceneRect.width() - 4, sceneRect.height() - 4);
-    QString message(tr("Click and drag the nodes around, and zoom with the mouse "
-                       "wheel or the '+' and '-' keys"));
-
-    QFont font = painter->font();
-    font.setBold(true);
-    font.setPointSize(14);
-    painter->setFont(font);
-    painter->setPen(Qt::lightGray);
-    painter->drawText(textRect.translated(2, 2), message);
-    painter->setPen(Qt::black);
-    painter->drawText(textRect, message);
 }
 
 void GraphWidget::scaleView(qreal scaleFactor)
@@ -105,6 +93,16 @@ void GraphWidget::graphUpdate(QString event){
     int i = list.at(0).toInt();
     if(i==1)
        addNode(list.at(1).toInt(), list.at(2).toInt());
+    else if(i==2){
+        Node* source = getNode("0,-1");
+        Node* target = getNode(list.at(2)+","+list.at(3));
+        scene->addItem(new Edge(source, target));
+    }
+    else if(i==3){
+        Node* target = getNode("-1,0");
+        Node* source = getNode(list.at(1)+","+list.at(2));
+        scene->addItem(new Edge(source, target));
+    }
     else if(i ==4 ){
         Node* source = getNode(list.at(1)+","+list.at(2));
         Node* target = getNode(list.at(3)+","+list.at(4));
@@ -122,4 +120,9 @@ Node* GraphWidget::getNode(QString node){
     if(Nodes.contains(node))
         return Nodes[node];
     else return 0;
+}
+void GraphWidget::AddNodeToWatch(Node* node, QColor color){
+    QString name = Nodes.key(node);
+    float* data = dojoPtr->GetNodePtr(name)->GetVoltagePtr()    ;
+    emit AddToWatch(data, name, color);
 }

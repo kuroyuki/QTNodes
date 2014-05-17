@@ -16,7 +16,7 @@ public:
     ClientArea(QWidget *parent = 0, dojoNetwork* dojo = 0);
 
 public :
-    void InitializeNetwork();
+    void BindNetwork();
     void ChangeYAccel (float newYAccel);
     void ChangeXAccel (float newXAccel);
     void ChangeViewDirection (float newDirection);

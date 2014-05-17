@@ -23,6 +23,7 @@ private:
 
 public:
     dojoNode(int sign);
+    ~dojoNode();
     virtual void Process(float timeScale);
     virtual void AddTarget(dojoSynapse* target);
     virtual void AddSource(dojoSynapse* source);

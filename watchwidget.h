@@ -26,6 +26,7 @@ private :
     void setupRealtimeDataDemo(QCustomPlot *customPlot);
 
     QCustomPlot* Plot;
+    QComboBox* watchingList;
 
     QHash <float*, QCPGraph*> graphTable;
 
