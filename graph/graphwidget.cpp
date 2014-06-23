@@ -19,8 +19,8 @@ GraphWidget::GraphWidget(QWidget *parent, dojoNetwork* dojo)
     setMinimumSize(400, 400);
     setWindowTitle(tr("Elastic Nodes"));
 
-    addNode(0,-1);
-    addNode(-1,0);
+    addNode(1,-1);
+    addNode(-1,1);
 }
 
 void GraphWidget::itemMoved()
@@ -94,12 +94,12 @@ void GraphWidget::graphUpdate(QString event){
     if(i==1)
        addNode(list.at(1).toInt(), list.at(2).toInt());
     else if(i==2){
-        Node* source = getNode("0,-1");
+        Node* source = getNode("1,-1");
         Node* target = getNode(list.at(2)+","+list.at(3));
         scene->addItem(new Edge(source, target));
     }
     else if(i==3){
-        Node* target = getNode("-1,0");
+        Node* target = getNode("-1,1");
         Node* source = getNode(list.at(1)+","+list.at(2));
         scene->addItem(new Edge(source, target));
     }

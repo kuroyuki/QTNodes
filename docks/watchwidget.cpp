@@ -12,7 +12,7 @@ WatchWidget::WatchWidget() :
     layout->addWidget(new QLabel(tr("Watching nodes:")), 1,1);
 
     watchingList =  new QComboBox();
-    watchingList->setInsertPolicy(QComboBox::InsertAtTop);
+    watchingList->setInsertPolicy(QComboBox::InsertAtCurrent);
     layout->addWidget(watchingList, 1,2);
 
     Plot = new QCustomPlot();
@@ -27,10 +27,14 @@ WatchWidget::WatchWidget() :
     child->setLayout(layout);
     setWidget(child);
 
-    // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
+    // setup a timer that repeatedly update plots
     Timer = new QTimer(this);
     connect(Timer, SIGNAL(timeout()), this, SLOT(Process()));
-    // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
+
+    //need to stop plot updates if widget is not visible
+    connect(this, SIGNAL(visibilityChanged(bool)),this, SLOT(VisibilityChanged(bool)));
+
+    // start update plots as quick as we can
     Timer->start(1);
 }
 void WatchWidget::AddGraph(float* value, QString name, QColor color){
@@ -95,4 +99,10 @@ void WatchWidget::Process()
   Plot->xAxis->setRange(key+0.25, 8, Qt::AlignRight);
   Plot->replot();
 
+}
+void WatchWidget::VisibilityChanged(bool isVisible){
+    if(isVisible == true)
+        Timer->start(1);
+    else
+        Timer->stop();
 }

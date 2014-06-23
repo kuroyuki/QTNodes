@@ -20,6 +20,7 @@ signals:
 
 public slots:
     void AddGraph(float* value, QString name, QColor color);
+    void VisibilityChanged(bool isVisible);
     void Process();
 
 private :

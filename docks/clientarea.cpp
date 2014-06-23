@@ -21,14 +21,14 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(ClientProcess()));
-    timer->start(20);
+    timer->start(10);
 
     grabKeyboard();
 }
 void ClientArea::BindNetwork(){
 
     dojoPtr->CreateSensor(&Sensor1, 1,1);
-    dojoPtr->CreateSensor(&Sensor2, 2,1);
+
     dojoPtr->CreateActuator(&Actuator1,1,2);
 
     UpdateNetwork(bitMask);
@@ -56,14 +56,16 @@ void ClientArea::keyPressEvent(QKeyEvent *event){
     update();
 }
 void ClientArea::UpdateNetwork(quint8 mask){
-    quint8 value;
-    counter++;
+    quint8 value;    
 
     if(stop) value = 0;
-    else if((counter == 0)|| (counter == 2))// || (counter == 2))
-        value = 35;
-
-    if(counter>20) counter = 0;
+    //fire each 100 ms (10 per second, 10 Hz)
+    else if((counter == 0))// || (counter == 2))
+        //voltage 60 volts
+        value = 50;
+    //cycle length
+    if(counter>100) counter = 0;
+    else counter++;
 
     Sensor1 = value *(mask & 0x01);
     Sensor2 = value *(mask>>1 & 0x01);
@@ -74,9 +76,8 @@ void ClientArea::UpdateNetwork(quint8 mask){
 
     if (Actuator1 > 255)
         Actuator1 = 255;
-    else if(Actuator1 == 0)
-        Actuator1 = 1;
-    Actuator1--;
+    if(Actuator1 > 0)
+       Actuator1--;
 }
 
 void ClientArea::paintEvent(QPaintEvent *)

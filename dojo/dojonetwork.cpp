@@ -38,7 +38,7 @@ void dojoNetwork::LoadNetwork(QString name){
     }
     configFile.close();
     QString event;
-    event = "5," + name;
+    event = "network loaded from " + networkName;
     emit dojoEvent(event);
 
 }

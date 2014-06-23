@@ -14,27 +14,30 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    terminalwidget.cpp \    
-    clientarea.cpp \
-    watchwidget.cpp \
-    ../qcustomplot/qcustomplot.cpp \    
+    ../qcustomplot/qcustomplot.cpp \
     dojo/dojosynapse.cpp \
     dojo/dojonode.cpp \
     dojo/dojonetwork.cpp \
     graph/node.cpp \
     graph/graphwidget.cpp \
-    graph/edge.cpp
+    graph/edge.cpp \
+    docks/watchwidget.cpp \
+    docks/terminalwidget.cpp \
+    docks/clientarea.cpp
 
 HEADERS  += mainwindow.h \
-    terminalwidget.h \   
-    clientarea.h \
-    watchwidget.h \
     ../qcustomplot/qcustomplot.h \
     dojo/dojosynapse.h \
     dojo/dojonode.h \
     dojo/dojonetwork.h \
     graph/node.h \
     graph/graphwidget.h \
-    graph/edge.h
+    graph/edge.h \
+    docks/watchwidget.h \
+    docks/terminalwidget.h \
+    docks/clientarea.h
 
 FORMS    += mainwindow.ui
+
+OTHER_FILES += \
+    ../build-QTNodes-Desktop_Qt_5_3_0_MinGW_32bit-Debug/network_1.dojo

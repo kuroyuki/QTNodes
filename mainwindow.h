@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "terminalwidget.h"
 #include "dojo/dojonetwork.h"
-#include "clientarea.h"
-#include "watchwidget.h"
+#include "docks/terminalwidget.h"
+#include "docks/clientarea.h"
+#include "docks/watchwidget.h"
 #include "graph/graphwidget.h"
 
 class MainWindow : public QMainWindow
