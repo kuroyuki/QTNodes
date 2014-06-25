@@ -27,7 +27,7 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 }
 void ClientArea::BindNetwork(){
 
-    dojoPtr->CreateSensor(&Sensor1, 1,1);
+    dojoPtr->CreateSensor(&Sensor1, 2,1);
 
     dojoPtr->CreateActuator(&Actuator1,1,2);
 
@@ -60,11 +60,11 @@ void ClientArea::UpdateNetwork(quint8 mask){
 
     if(stop) value = 0;
     //fire each 100 ms (10 per second, 10 Hz)
-    else if((counter == 0))// || (counter == 2))
+    else if((counter == 0) || (counter == 3) || (counter == 6))
         //voltage 60 volts
-        value = 50;
+        value = 100;
     //cycle length
-    if(counter>100) counter = 0;
+    if(counter>10) counter = 0;
     else counter++;
 
     Sensor1 = value *(mask & 0x01);

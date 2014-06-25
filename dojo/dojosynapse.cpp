@@ -1,5 +1,6 @@
 #include "dojosynapse.h"
 #include "math.h"
+#include "dojonode.h"
 
 dojoSynapse::dojoSynapse(){
 
@@ -54,14 +55,19 @@ dojoChemicalSynapse::dojoChemicalSynapse(dojoNode* source, dojoNode* target, flo
     Terminals = 100;
     Cleft = 0;
     Permability = 5;
+
+    isTested = false;
+    timeSinceAp = 0;
 }
 
 float dojoChemicalSynapse::GetVoltage(float timeScale){
+    timeSinceAp += timeScale;
+
     float voltage = 0;
     //calc what is volatge injected by this synapse multiplied in ms
     if(Cleft>0){
         //synpase voltage will affect trigger area according to distance
-        voltage = Cleft*Permability*exp(-Distance/LENGHT_CONST);
+        voltage = Cleft*Permability*exp(-Distance/LENGHT_CONST);        
     }
     //remove all transmitter from cleft
     Cleft = 0;
@@ -74,6 +80,7 @@ void dojoChemicalSynapse::AP(dojoNode* node, float timeScale){
     if(node == Source){
         //eject Mediator
         Cleft = Terminals;
+        timeSinceAp = 0;
         /*
         //change Terminals count for next release depends on timeScale in ms
         //e.g. if it less than 50 ms it will decreased, if it more than 100 ms it will be decreased but more slowly
@@ -84,7 +91,12 @@ void dojoChemicalSynapse::AP(dojoNode* node, float timeScale){
     //if it is Postsynapse
     else if (node == Target){
         //change permability (Hebb rule)
-        Permability = 5;//1/(exp(5-Cleft));
+        if(!isTested) Permability = 5;//1/(exp(5-Cleft));
+        else {
+            if(timeSinceAp > (TIME_CONST-1) && timeSinceAp < (TIME_CONST+1))
+                Permability = 25;
+            else Permability = Permability*1.5*log(abs(TIME_CONST-timeSinceAp));
+        }
     }
 }
 dojoNode* dojoChemicalSynapse::GetTarget(){

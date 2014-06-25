@@ -18,6 +18,7 @@ public:
     explicit dojoNetwork(QObject *parent = 0);
     void LoadNetwork(QString name);
     void CreateNode(int x, int y);
+    void DeleteNode(int x, int y);
     void BindNodes(int source_x, int source_y, int target_x, int target_y);
 
     void CreateSensor(float* data, int x, int y);

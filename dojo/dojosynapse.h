@@ -59,6 +59,9 @@ private :
 
     float Permability;
     float Distance;
+
+    int timeSinceAp;
+    bool isTested;
 };
 
 #endif // DOJOSYNAPSE_H

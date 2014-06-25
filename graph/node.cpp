@@ -10,8 +10,6 @@
 Node::Node(GraphWidget *graphWidget)
     : graph(graphWidget)
 {
-    setFlag(ItemIsMovable);
-    setFlag(ItemSendsGeometryChanges);
     setCacheMode(DeviceCoordinateCache);
     setZValue(-1);
 
@@ -87,7 +85,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseReleaseEvent(event);
 }
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
-    if(x()<0 || y()<0)
+    if(x()<=0 || y()<=0)
         return;
     else graph->AddNodeToWatch(this, color);
 }

@@ -57,13 +57,13 @@ void dojoNetwork::Process(){
 
 void dojoNetwork::CreateNode(int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
-    if(!NodeTable.contains(string))
+    if(!NodeTable.contains(string)){
         NodeTable[string] = new dojoNode(1);
+        QString event;
+        event += "1," + QString::number(x)+','+QString::number(y);
 
-    QString event;
-    event += "1," + QString::number(x)+','+QString::number(y);
-
-    emit dojoEvent(event);
+        emit dojoEvent(event);
+    }
 }
 void dojoNetwork::CreateSensor(float* data, int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
@@ -117,15 +117,6 @@ void dojoNetwork::BindNodes(int source_x, int source_y, int target_x, int target
     source->AddTarget(synapse);
     target->AddSource(synapse);
 
-    /*
-    QFile file(networkName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    QTextStream out(&file);
-    out  <<  QString::number(source_x)<<','<<QString::number(source_y)<<','<<QString::number(target_x)<<','<<QString::number(target_y);
-    file.close();
-*/
     QString event;
     event += "4," + QString::number(source_x)+','+QString::number(source_y)+','+ QString::number(target_x)+','+QString::number(target_y);
 
