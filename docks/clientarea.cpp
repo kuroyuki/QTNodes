@@ -28,8 +28,8 @@ ClientArea::ClientArea(QWidget *parent, dojoNetwork* dojo)
 void ClientArea::BindNetwork(){
 
     dojoPtr->CreateSensor(&Sensor1, 2,1);
-
-    dojoPtr->CreateActuator(&Actuator1,1,2);
+    dojoPtr->CreateActuator(&Actuator1, 2,3);
+    dojoPtr->DeleteNode(2,2);
 
     UpdateNetwork(bitMask);
 }

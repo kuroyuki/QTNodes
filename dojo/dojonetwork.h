@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QFile>
 #include <QTextStream>
+#include <QSize>
 
 #include "dojonode.h"
 
@@ -24,6 +25,8 @@ public:
     void CreateSensor(float* data, int x, int y);
     void CreateActuator(float* data, int x, int y);
 
+    QSize GetNetworkSize();
+
     dojoNode* GetNodePtr(QString node);
 
 signals:
@@ -35,6 +38,7 @@ private :
     QHash <QString, dojoNode*> NodeTable;
     QTimer *timer;
     QString networkName;
+    QSize networkSize;
 
     void ParseConfigFile(QFile* file);
 

@@ -9,14 +9,17 @@ GraphWidget::GraphWidget(QWidget *parent, dojoNetwork* dojo)
     dojoPtr = dojo;
     scene = new QGraphicsScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    scene->setSceneRect(0, 0, 700, 500);
+
+    //set scene size
+    scene->setSceneRect(0, 0, dojoPtr->GetNetworkSize().width()*50, dojoPtr->GetNetworkSize().height()*50);
+
     setScene(scene);
     setCacheMode(CacheBackground);
     setViewportUpdateMode(BoundingRectViewportUpdate);
     setRenderHint(QPainter::Antialiasing);
     setTransformationAnchor(AnchorUnderMouse);
     scale(qreal(0.8), qreal(0.8));
-    setMinimumSize(400, 400);
+
     setWindowTitle(tr("Elastic Nodes"));
 
     addNode(1,-1);
@@ -107,6 +110,14 @@ void GraphWidget::graphUpdate(QString event){
         Node* source = getNode(list.at(1)+","+list.at(2));
         Node* target = getNode(list.at(3)+","+list.at(4));
         scene->addItem(new Edge(source, target));
+    }
+    else if(i ==5 ){
+        Node* node = getNode(list.at(1)+","+list.at(2));
+        scene->removeItem(node);
+    }
+    else if(i ==6 ){
+        //set new scene size
+        scene->setSceneRect(0, 0, dojoPtr->GetNetworkSize().width()*50, dojoPtr->GetNetworkSize().height()*50);
     }
 }
 void GraphWidget::addNode(qreal x, qreal y){

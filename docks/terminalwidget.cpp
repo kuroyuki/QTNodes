@@ -38,6 +38,9 @@ void TerminalWidget::ParseEvent(QString event){
         case 4 :
             AddText("bind nodes "+list.at(1)+","+list.at(2)+" and "+list.at(3)+","+list.at(4));
             break;
+        case 5 :
+            AddText("delete node "+list.at(1)+","+list.at(2));
+            break;
         default :
             AddText(event);
             break;

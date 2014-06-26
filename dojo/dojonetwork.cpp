@@ -7,6 +7,9 @@
 dojoNetwork::dojoNetwork(QObject *parent) :
     QObject(parent)
 {
+    networkSize.setWidth(1);
+    networkSize.setHeight(1);
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Process()));
     timer->start(TIME_SCALE);
@@ -19,6 +22,18 @@ void dojoNetwork::LoadNetwork(QString name){
     if (!configFile.open(QIODevice::ReadWrite | QIODevice::Text))
        return;
 
+    //load network size from file
+    QString line = configFile.readLine();
+    QStringList list = line.split(",");
+
+    networkSize.setWidth(list.at(0).toInt());
+    networkSize.setHeight(list.at(1).toInt());
+
+    QString event;
+    event = "6,"+list.at(0)+','+list.at(1);
+    emit dojoEvent(event);
+
+    //load nodes and connections
     while (!configFile.atEnd()) {
        QString line = configFile.readLine();
        QStringList list = line.split(",");
@@ -37,7 +52,7 @@ void dojoNetwork::LoadNetwork(QString name){
        BindNodes(source_x,source_y,target_x,target_y);
     }
     configFile.close();
-    QString event;
+
     event = "network loaded from " + networkName;
     emit dojoEvent(event);
 
@@ -53,6 +68,8 @@ void dojoNetwork::Process(){
  * 2 - sensor create
  * 3 - act create
  * 4 - bind nodes
+ * 5 - delete node
+ * 6 - network size changed
  **/
 
 void dojoNetwork::CreateNode(int x, int y){
@@ -65,6 +82,22 @@ void dojoNetwork::CreateNode(int x, int y){
         emit dojoEvent(event);
     }
 }
+void dojoNetwork::DeleteNode(int x, int y){
+    QString string =  QString::number(x)+','+QString::number(y);
+    if(NodeTable.contains(string)){
+        //delete all synapses
+
+        //delete node
+        NodeTable.remove(string);
+
+        //generate event about it
+        QString event;
+        event += "5," + QString::number(x)+','+QString::number(y);
+
+        emit dojoEvent(event);
+    }
+}
+
 void dojoNetwork::CreateSensor(float* data, int x, int y){
     QString string =  QString::number(x)+','+QString::number(y);
 
@@ -125,4 +158,7 @@ void dojoNetwork::BindNodes(int source_x, int source_y, int target_x, int target
 dojoNode* dojoNetwork::GetNodePtr(QString node){
     dojoNode* nodePtr = this->NodeTable[node];
     return nodePtr;
+}
+QSize dojoNetwork::GetNetworkSize(){
+    return networkSize;
 }
