@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     graph/edge.cpp \
     docks/watchwidget.cpp \
     docks/terminalwidget.cpp \
-    docks/clientarea.cpp
+    docks/clientarea.cpp \
+    network/dojogephivisual.cpp
 
 HEADERS  += mainwindow.h \
     ../qcustomplot/qcustomplot.h \
@@ -35,7 +36,9 @@ HEADERS  += mainwindow.h \
     graph/edge.h \
     docks/watchwidget.h \
     docks/terminalwidget.h \
-    docks/clientarea.h
+    docks/clientarea.h \
+    dojogephivisual.h \
+    network/dojogephivisual.h
 
 FORMS    += mainwindow.ui
 
